@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oporupa_v1 - AI Legal Assistant for Bangladesh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #006a4e 0%, #f42a41 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            background: linear-gradient(to right, #006a4e, #f42a41);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: #006a4e;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .version {
+            background: white;
+            color: #f42a41;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 1rem;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        
+        .tagline {
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .intro {
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #006a4e;
+        }
+        
+        h2 {
+            color: #006a4e;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f42a41;
+            display: inline-block;
+        }
+        
+        .analytics {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            gap: 15px;
+        }
+        
+        .counter {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(to bottom, #006a4e, #008a5e);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .counter:hover {
+            transform: translateY(-5px);
+        }
+        
+        .counter-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .counter-label {
+            font-size: 1rem;
+        }
+        
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        
+        .chat-output {
+            height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: #006a4e;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .bot-message {
+            background: #e9ecef;
+            color: #333;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .input-container {
+            display: flex;
+            padding: 15px;
+            background: white;
+        }
+        
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #006a4e;
+        }
+        
+        button {
+            padding: 15px 25px;
+            background: #f42a41;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #d91e33;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 15px;
+            display: none;
+        }
+        
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .loading-dots span {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background: #006a4e;
+            border-radius: 50%;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+        
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-top: 5px solid #f42a41;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #006a4e;
+            margin-bottom: 15px;
+        }
+        
+        .disclaimer {
+            background: #fff4f4;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #f42a41;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .analytics {
+                flex-direction: column;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: #e9ecef;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #006a4e;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">⚖️</div>
+                <h1>Oporupa<span class="version">v1</span></h1>
+            </div>
+            <p class="tagline">Bangladesh's Pioneering AI Legal Assistant</p>
+        </header>
+        
+        <div class="content">
+            <section class="intro">
+                <h2>Your Legal Assistant</h2>
+                <p>Oporupa_v1 is an AI-powered legal assistant specifically designed for citizens of Bangladesh. We simplify complex legal jargon and official language into easy-to-understand explanations.</p>
+            </section>
+            
+            <section class="analytics">
+                <div class="counter">
+                    <div class="counter-value" id="visitor-count">1,247</div>
+                    <div class="counter-label">Total Visitors</div>
+                </div>
+                <div class="counter">
+                    <div class="counter-value" id="question-count">583</div>
+                    <div class="counter-label">Questions Asked</div>
+                </div>
+            </section>
+            
+            <section class="chat-container">
+                <div id="chat-output" class="chat-output">
+                    <div class="message bot-message">
+                        Hello! I am Oporupa_v1, your AI legal assistant. How can I help you with Bangladeshi laws and government services today?
+                    </div>
+                </div>
+                
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Ask your legal question here...">
+                    <button id="send-btn"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <p>Oporupa_v1 is thinking...</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2 style="text-align: center;">Capabilities of Oporupa_v1</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <h3>Legal Expertise</h3>
+                        <p>Trained on Bangladesh's laws, gazettes, and government portals</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-signs"></i>
+                        </div>
+                        <h3>Step-by-Step Guidance</h3>
+                        <p>Clear instructions on legal procedures and government services</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Transparency</h3>
+                        <p>Promotes transparency and combats corruption</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="disclaimer">
+                <h2>Disclaimer</h2>
+                <p>Oporupa_v1 provides legal information but does not constitute formal legal advice. For specific legal matters, please consult with a qualified legal professional.</p>
+            </section>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Developed by Tahsin Raiyan | Democratizing access to legal information in Bangladesh</p>
+        <p>© 2023 Oporupa_v1. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatOutput = document.getElementById('chat-output');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const loading = document.getElementById('loading');
+            const visitorCount = document.getElementById('visitor-count');
+            const questionCount = document.getElementById('question-count');
+            
+            // Initialize with sample questions
+            const sampleQuestions = [
+                "How do I file a property dispute case?",
+                "What documents are needed for a marriage certificate?",
+                "How to report corruption in my area?",
+                "What are my rights as a tenant in Bangladesh?"
+            ];
+            
+            // Add sample questions to chat
+            setTimeout(() => {
+                addMessage("Try asking me something like:", "bot");
+                
+                sampleQuestions.forEach((question, index) => {
+                    setTimeout(() => {
+                        addMessage(question, "bot", true);
+                    }, (index + 1) * 500);
+                });
+            }, 1500);
+            
+            sendBtn.addEventListener('click', handleSendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+            
+            function handleSendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage(message, 'user');
+                    userInput.value = '';
+                    
+                    // Update question counter
+                    const currentCount = parseInt(questionCount.textContent.replace(',', ''));
+                    questionCount.textContent = (currentCount + 1).toLocaleString();
+                    
+                    simulateAIResponse(message);
+                }
+            }
+            
+            function addMessage(text, sender, isSample = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(sender + '-message');
+                
+                if (isSample) {
+                    messageDiv.style.fontStyle = 'italic';
+                    messageDiv.style.opacity = '0.8';
+                }
+                
+                messageDiv.textContent = text;
+                chatOutput.appendChild(messageDiv);
+                chatOutput.scrollTop = chatOutput.scrollHeight;
+            }
+            
+            function simulateAIResponse(userMessage) {
+                loading.style.display = 'block';
+                
+                // Simulate API response delay
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    
+                    // Simple response logic for demonstration
+                    let response = "I understand you're asking about legal matters in Bangladesh. ";
+                    
+                    if (userMessage.toLowerCase().includes("property") || userMessage.toLowerCase().includes("land")) {
+                        response += "For property disputes in Bangladesh, you typically need to file a case with the appropriate court. The process involves submitting a plaint, supporting documents, and paying court fees. I can guide you through the specific steps if you provide more details.";
+                    } else if (userMessage.toLowerCase().includes("marriage") || userMessage.toLowerCase().includes("certificate")) {
+                        response += "To obtain a marriage certificate in Bangladesh, you need to apply at your local Union Parishad or Municipality office with two witnesses, photos, and copies of your NID cards. The process usually takes 7-15 working days.";
+                    } else if (userMessage.toLowerCase().includes("corruption") || userMessage.toLowerCase().includes("bribery")) {
+                        response += "To report corruption in Bangladesh, you can contact the Anti-Corruption Commission (ACC) at their hotline 106 or visit their website. You may also report to local authorities while ensuring your own safety.";
+                    } else {
+                        response += "As an AI legal assistant for Bangladesh, I'm trained on official laws and government procedures. I can help simplify complex legal concepts and guide you through bureaucratic processes. How can I assist you specifically?";
+                    }
+                    
+                    addMessage(response, 'bot');
+                }, 2000);
+            }
+            
+            // Animated counter effect
+            function animateCounter(element, target) {
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        element.textContent = target.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            }
+            
+            // Initialize counters with animation
+            animateCounter(visitorCount, 1247);
+            animateCounter(questionCount, 583);
+        });
+    </script>
+</body>
+</html>
